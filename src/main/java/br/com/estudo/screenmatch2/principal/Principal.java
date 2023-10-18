@@ -3,14 +3,14 @@ package br.com.estudo.screenmatch2.principal;
 import br.com.estudo.screenmatch2.model.DadosEpisodio;
 import br.com.estudo.screenmatch2.model.DadosSerie;
 import br.com.estudo.screenmatch2.model.DadosTemporada;
+import br.com.estudo.screenmatch2.model.Episodio;
 import br.com.estudo.screenmatch2.service.ConsumoAPI;
 import br.com.estudo.screenmatch2.service.ConverteDados;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -53,5 +53,39 @@ public class Principal {
                 .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                 .limit(5)
                 .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(d -> new Episodio(t.numero(), d))
+                ).collect(Collectors.toList());
+
+        System.out.println("\nDigite um titulo do episódio desejado: ");
+
+        var trechoTitulo = sc.nextLine();
+        Optional<Episodio> episodioBuscado = episodios.stream()
+                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
+                .findFirst();
+        if(episodioBuscado.isPresent()){
+            System.out.println("Episodio encontrado");
+            System.out.println("Titulo: "+ episodioBuscado.get().getTitulo()
+                    + "\nTemporada: "+episodioBuscado.get().getTemporada());
+        } else {
+            System.out.println("Episódio não encontrado");
+        }
+
+//        System.out.println("A partir de que ano você deseja ver os episódios?");
+//        var ano = sc.nextInt();
+//        sc.nextLine();
+//
+//        LocalDate dataBusca = LocalDate.of(ano,1,1);
+//
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        episodios.stream()
+//                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+//                .forEach(e -> System.out.println(
+//                        "Temporada: " + e.getTemporada() +
+//                                "| Episodio: " + e.getTitulo() +
+//                                "| Data de Lançamento: " + e.getDataLancamento().format(dtf)
+//                ));
     }
 }
