@@ -9,3 +9,6 @@
 * Java
 * Maven
 * Spring Framework
+* Persistência Spring data JPA
+* Banco de dados MySQL
+* Consumir API do ChatGPT
