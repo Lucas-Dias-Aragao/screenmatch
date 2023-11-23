@@ -38,7 +38,10 @@ public class Serie {
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
         //this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+        this.sinopse = dadosSerie.sinopse();
     }
+
+    public Serie() {}
 
     public List<Episodio> getEpisodios() {
         return episodios;
